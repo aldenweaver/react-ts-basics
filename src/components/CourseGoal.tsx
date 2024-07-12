@@ -1,18 +1,23 @@
 import { type PropsWithChildren } from "react";
-// import { type CourseGoalType } from "../types/CourseGoalType";
 
-type CourseGoalType = PropsWithChildren & {
+export type CourseGoalProps = PropsWithChildren<{
+    id: number;
     title: string;
-};
+    onDelete: (id: number) => void;
+}>;
 
-export default function CourseGoal({ title, children }: CourseGoalType) {
+export default function CourseGoal({ 
+                            title, 
+                            id,
+                            children,
+                            onDelete }: CourseGoalProps) {
     return(
         <article>
             <div>
                 <h2>{title}</h2>
-                <p>{children}</p>
+                {children}
             </div>
-            <button>Delete</button>
+            <button onClick={() => onDelete(id)}>Delete</button>
         </article>
     );
 };

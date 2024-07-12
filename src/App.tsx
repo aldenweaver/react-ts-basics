@@ -1,54 +1,49 @@
-import CourseGoal from './components/CourseGoal.tsx';
-import FavoriteItem from './components/FavoriteItem.tsx';
+import CourseGoalList from './components/CourseGoalList.tsx';
+// import FavoriteItem from './components/FavoriteItem.tsx';
 import Header from './components/Header.tsx';
-
-// import CourseGoalType from './types/CourseGoalType';
-
 
 import goalsImg from './assets/goals.jpg'
 import { useState } from 'react';
+import NewGoal from './components/NewGoal.tsx';
 
-export type CourseGoalType = {
+export type CourseGoal = {
+  id: number;
   title: string;
   description: string;
-  id: number;
 }
 
 export default function App() {
-  const[goals, setGoals] = useState<CourseGoalType[]>([]);
+  const[goals, setGoals] = useState<CourseGoal[]>([]);
 
-  function handleAddGoal() {
-    setGoals(prevGoals => {
-      const newGoal: CourseGoalType = {
-        id: Math.random(),
-        title: 'Learn React + TS',
-        description: 'Learn it in depth!'
+  function handleAddGoal(goal: string, summary: string) {
+      setGoals(prevGoals => {
+      const newGoal: CourseGoal = {
+          id: Math.random(),
+          title: goal,
+          description: summary
       };
       return [...prevGoals, newGoal];
-    });
+      });
   };
 
-
+  function handleDeleteGoal(id: number) {
+    setGoals(prevGoals => prevGoals.filter((goal) => goal.id !== id));
+  };
+ 
   return (
     <main>
       <Header img={{ src: goalsImg, alt: 'A list of goals'}} >
         <h1>Your Course Goals</h1>
       </Header>
-      <button onClick={handleAddGoal}>Add Goal</button>
-      <ul>
-        {goals.map((goal) => (
-          <li key={goal.id}>
-            <CourseGoal title={goal.title}>
-              <p>{goal.description}</p>
-            </CourseGoal>
-          </li>
-        ))}
-      </ul>
-      
+
+      <NewGoal onAddGoal={handleAddGoal}/>
+
+      <CourseGoalList goals={goals} onDeleteGoal={handleDeleteGoal}/>
+{/*       
       <FavoriteItem 
         title="Learn React + TS" 
         description="Learn it from the ground up"
-        route="www.google.com"/>
+        route="https://www.google.com/"/> */}
     </main>
   );
 };
